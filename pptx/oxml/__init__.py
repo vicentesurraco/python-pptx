@@ -12,7 +12,7 @@ import os
 from lxml import etree
 
 from .ns import NamespacePrefixedTag
-
+from pathlib import Path
 
 # configure etree XML parser -------------------------------
 element_class_lookup = etree.ElementNamespaceClassLookup()
@@ -25,8 +25,10 @@ def parse_from_template(template_name):
     Return an element loaded from the XML in the template file identified by
     *template_name*.
     """
-    thisdir = os.path.split(__file__)[0]
-    filename = os.path.join(thisdir, "..", "templates", "%s.xml" % template_name)
+    thisdir = Path(os.path.split(__file__)[0])
+    thisdir = Path(thisdir).parent
+    filename = os.path.join(thisdir, "templates", "%s.xml" % template_name)
+
     with open(filename, "rb") as f:
         xml = f.read()
     return parse_xml(xml)
